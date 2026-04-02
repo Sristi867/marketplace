@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElectroMarket – Electronics Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & ROOT ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #131921;
+  --navy2: #1a2332;
+  --orange: #ff9900;
+  --orange-dark: #e07000;
+  --blue: #007bff;
+  --text: #0f1111;
+  --muted: #565959;
+  --light: #f3f3f3;
+  --white: #ffffff;
+  --border: #ddd;
+  --green: #007600;
+  --red: #c40000;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  --card-radius: 8px;
+}
+body { font-family: 'Inter', 'Amazon Ember', Arial, sans-serif; background: #eaeded; color: var(--text); min-height: 100vh; font-size: 14px; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; }
+img { display: block; }
+
+/* ===== NAVBAR ===== */
+.navbar { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 200; }
+.nav-top { display: flex; align-items: center; gap: 8px; padding: 8px 16px; height: 60px; }
+.nav-logo { display: flex; align-items: center; gap: 4px; padding: 6px 8px; border: 2px solid transparent; border-radius: 3px; cursor: pointer; white-space: nowrap; }
+.nav-logo:hover { border-color: #fff; }
+.logo-text { font-size: 22px; font-weight: 700; letter-spacing: -1px; }
+.logo-text span { color: var(--orange); }
+.logo-in { font-size: 11px; font-weight: 600; color: var(--orange); margin-top: -4px; }
+.nav-deliver { padding: 4px 8px; border: 2px solid transparent; border-radius: 3px; cursor: pointer; font-size: 12px; color: #ccc; }
+.nav-deliver:hover { border-color: #fff; color: #fff; }
+.nav-deliver b { display: block; font-size: 13px; font-weight: 700; color: #fff; }
+.nav-search { flex: 1; display: flex; max-width: 800px; border-radius: 6px; overflow: hidden; }
+.search-cat { background: #f3f3f3; border: none; padding: 0 10px; font-size: 12px; color: #333; border-radius: 6px 0 0 6px; min-width: 50px; cursor: pointer; }
+.search-input { flex: 1; border: none; padding: 0 12px; font-size: 15px; outline: none; color: #111; }
+.search-btn { background: var(--orange); border: none; padding: 0 16px; display: flex; align-items: center; border-radius: 0 6px 6px 0; }
+.search-btn svg { width: 18px; height: 18px; fill: #333; }
+.nav-right { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.nav-link { padding: 6px 8px; border: 2px solid transparent; border-radius: 3px; cursor: pointer; color: #fff; white-space: nowrap; }
+.nav-link:hover { border-color: #fff; }
+.nav-link small { display: block; font-size: 11px; color: #ccc; }
+.nav-link b { display: block; font-size: 13px; }
+.nav-cart { display: flex; align-items: center; gap: 4px; padding: 6px 10px; border: 2px solid transparent; border-radius: 3px; cursor: pointer; color: #fff; }
+.nav-cart:hover { border-color: #fff; }
+.cart-icon { font-size: 28px; position: relative; }
+.cart-count { position: absolute; top: -4px; right: -6px; background: var(--orange); color: #111; font-size: 11px; font-weight: 700; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+.cart-label { font-size: 13px; font-weight: 700; }
+.nav-bottom { background: var(--navy2); padding: 4px 16px; display: flex; gap: 4px; overflow-x: auto; }
+.nav-cat-btn { color: #fff; background: none; border: 2px solid transparent; border-radius: 3px; padding: 5px 10px; font-size: 13px; white-space: nowrap; cursor: pointer; }
+.nav-cat-btn:hover, .nav-cat-btn.active { border-color: #fff; }
+
+/* ===== LAYOUT ===== */
+.container { max-width: 1500px; margin: 0 auto; padding: 0 16px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== HERO BANNER ===== */
+.hero { position: relative; overflow: hidden; height: 340px; background: linear-gradient(135deg, #1a2a3a 0%, #0d1b2a 100%); }
+.hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+.hero-overlay { position: absolute; inset: 0; display: flex; align-items: center; padding: 40px; background: linear-gradient(90deg, rgba(0,0,0,0.7) 0%, transparent 60%); }
+.hero-content { color: #fff; max-width: 520px; }
+.hero-tag { background: var(--orange); color: #111; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 4px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; }
+.hero-title { font-size: 38px; font-weight: 700; line-height: 1.15; margin-bottom: 10px; }
+.hero-sub { font-size: 15px; color: #ccc; margin-bottom: 20px; }
+.hero-btn { background: var(--orange); color: #111; border: none; padding: 12px 28px; border-radius: 6px; font-size: 15px; font-weight: 700; display: inline-block; cursor: pointer; }
+.hero-btn:hover { background: var(--orange-dark); }
+
+/* ===== SECTION ===== */
+.section { margin: 16px 0; }
+.section-card { background: #fff; border-radius: var(--card-radius); padding: 20px; box-shadow: var(--card-shadow); }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 2px solid var(--orange); padding-bottom: 8px; }
+.section-title { font-size: 20px; font-weight: 700; color: var(--navy); }
+.see-all { color: #007bff; font-size: 13px; font-weight: 500; cursor: pointer; }
+.see-all:hover { text-decoration: underline; color: var(--orange-dark); }
+
+/* ===== CATEGORY PILLS ===== */
+.cat-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.cat-pill { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+.cat-pill-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; transition: border 0.2s; background: #eee; }
+.cat-pill:hover .cat-pill-img, .cat-pill.active .cat-pill-img { border-color: var(--orange); }
+.cat-pill-name { font-size: 12px; font-weight: 500; color: var(--text); text-align: center; max-width: 70px; }
+
+/* ===== PRODUCT GRID ===== */
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.prod-card { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 0; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+.prod-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.15); transform: translateY(-2px); border-color: #ccc; }
+.prod-img-wrap { width: 100%; aspect-ratio: 1; background: #f7f7f7; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 12px; }
+.prod-img-wrap img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s; }
+.prod-card:hover .prod-img-wrap img { transform: scale(1.05); }
+.prod-body { padding: 10px 12px 14px; flex: 1; display: flex; flex-direction: column; }
+.prod-name { font-size: 13px; font-weight: 500; color: #0f1111; margin-bottom: 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.prod-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
+.stars { color: #f90; font-size: 13px; }
+.rating-count { font-size: 12px; color: #007bff; }
+.prod-price { font-size: 18px; font-weight: 700; color: #0f1111; margin-bottom: 2px; }
+.prod-price-orig { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+.prod-badge { display: inline-block; background: #cc0c39; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 3px; margin-bottom: 6px; }
+.prod-delivery { font-size: 12px; color: var(--green); margin-top: auto; }
+.prod-delivery span { color: var(--muted); }
+.add-btn { width: 100%; background: var(--orange); border: 1px solid var(--orange-dark); border-radius: 20px; padding: 7px; font-size: 13px; font-weight: 600; color: #111; margin-top: 8px; transition: background 0.15s; }
+.add-btn:hover { background: var(--orange-dark); }
+
+/* ===== HORIZONTAL SCROLL GRID ===== */
+.hscroll { overflow-x: auto; padding-bottom: 8px; }
+.hscroll::-webkit-scrollbar { height: 6px; }
+.hscroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.hscroll-grid { display: flex; gap: 12px; }
+.hscroll-grid .prod-card { min-width: 190px; max-width: 190px; flex-shrink: 0; }
+
+/* ===== DEALS BANNER ===== */
+.deals-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.deal-card { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 12px; display: flex; gap: 12px; align-items: center; cursor: pointer; transition: box-shadow 0.2s; }
+.deal-card:hover { box-shadow: var(--card-shadow); }
+.deal-img { width: 80px; height: 80px; object-fit: contain; background: #f7f7f7; border-radius: 6px; padding: 6px; flex-shrink: 0; }
+.deal-info { flex: 1; }
+.deal-badge { font-size: 11px; font-weight: 700; color: #cc0c39; margin-bottom: 4px; }
+.deal-name { font-size: 13px; font-weight: 500; line-height: 1.3; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.deal-price { font-size: 17px; font-weight: 700; }
+
+/* ===== PRODUCT DETAIL PAGE ===== */
+.detail-layout { display: grid; grid-template-columns: 1fr 1.4fr 320px; gap: 20px; padding: 20px 0; align-items: start; }
+.detail-imgs { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.detail-main-img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.detail-thumbs { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.thumb { width: 52px; height: 52px; object-fit: contain; border: 2px solid var(--border); border-radius: 4px; padding: 3px; cursor: pointer; background: #f7f7f7; }
+.thumb:hover, .thumb.active { border-color: var(--orange); }
+.detail-info { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.detail-title { font-size: 22px; font-weight: 500; line-height: 1.3; margin-bottom: 8px; }
+.detail-brand { font-size: 14px; color: #007bff; margin-bottom: 8px; }
+.detail-rating { display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.detail-price-box { padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.detail-price { font-size: 28px; font-weight: 400; }
+.detail-price-orig { font-size: 14px; color: var(--muted); }
+.detail-save { font-size: 13px; color: var(--red); font-weight: 500; }
+.detail-feat { list-style: disc; padding-left: 20px; font-size: 14px; line-height: 1.8; color: #333; }
+.buy-box { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.buy-price { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.buy-delivery { font-size: 13px; color: var(--green); margin-bottom: 4px; }
+.buy-stock { font-size: 16px; font-weight: 500; color: var(--green); margin-bottom: 12px; }
+.qty-select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; margin-bottom: 10px; background: #f7f7f7; }
+.buy-btn { width: 100%; padding: 10px; background: var(--orange); border: 1px solid var(--orange-dark); border-radius: 20px; font-size: 14px; font-weight: 600; color: #111; margin-bottom: 8px; cursor: pointer; }
+.buy-btn:hover { background: var(--orange-dark); }
+.cart-btn { width: 100%; padding: 10px; background: #ffd814; border: 1px solid #c7a600; border-radius: 20px; font-size: 14px; font-weight: 600; color: #111; cursor: pointer; }
+.cart-btn:hover { background: #f7ca00; }
+.buy-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; }
+
+/* ===== CART PAGE ===== */
+.cart-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; padding: 20px 0; align-items: start; }
+.cart-main { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.cart-title { font-size: 22px; font-weight: 500; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.cart-item-row { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee; }
+.cart-item-img { width: 130px; height: 130px; object-fit: contain; background: #f7f7f7; border-radius: 6px; padding: 8px; flex-shrink: 0; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+.cart-item-stock { font-size: 13px; color: var(--green); margin-bottom: 6px; }
+.cart-item-price { font-size: 18px; font-weight: 700; }
+.qty-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.qty-ctrl { background: #f7f7f7; border: 1px solid var(--border); border-radius: 20px; display: flex; align-items: center; gap: 8px; padding: 4px 12px; }
+.qty-btn { background: none; border: none; font-size: 18px; font-weight: 700; cursor: pointer; color: var(--navy); line-height: 1; padding: 2px 4px; }
+.qty-num { font-size: 15px; font-weight: 600; min-width: 24px; text-align: center; }
+.del-btn { background: none; border: none; color: #c45500; font-size: 13px; cursor: pointer; text-decoration: underline; }
+.order-summary { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.order-summary h3 { font-size: 16px; margin-bottom: 14px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; }
+.summary-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; padding: 12px 0 0; border-top: 1px solid var(--border); margin-top: 8px; }
+.checkout-btn { width: 100%; padding: 10px; background: var(--orange); border: 1px solid var(--orange-dark); border-radius: 20px; font-size: 15px; font-weight: 700; color: #111; cursor: pointer; margin-top: 14px; }
+.checkout-btn:hover { background: var(--orange-dark); }
+
+/* ===== ORDERS PAGE ===== */
+.orders-wrap { padding: 20px 0; }
+.orders-wrap h2 { font-size: 24px; font-weight: 400; margin-bottom: 16px; }
+.order-card { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+.order-hdr { background: #f7f7f7; padding: 12px 20px; display: flex; gap: 24px; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.order-hdr-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+.order-hdr-val { font-size: 13px; font-weight: 500; }
+.order-status { margin-left: auto; font-weight: 700; }
+.status-Delivered { color: var(--green); }
+.status-Shipped { color: #c45500; }
+.status-Processing { color: #007bff; }
+.status-Cancelled { color: var(--red); }
+.order-items-list { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+.order-item-row { display: flex; align-items: center; gap: 16px; }
+.order-item-img { width: 70px; height: 70px; object-fit: contain; background: #f7f7f7; border-radius: 6px; padding: 6px; }
+.order-item-name { font-size: 14px; font-weight: 500; }
+
+/* ===== ACCOUNT PAGE ===== */
+.auth-wrap { max-width: 500px; margin: 40px auto; }
+.auth-card { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 28px; }
+.auth-title { font-size: 24px; font-weight: 400; margin-bottom: 20px; }
+.auth-divider { text-align: center; color: var(--muted); font-size: 13px; margin: 20px 0; position: relative; }
+.auth-divider::before { content:''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+.auth-divider span { background: #fff; padding: 0 10px; position: relative; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.form-input { width: 100%; padding: 9px 12px; border: 1px solid #a6a6a6; border-radius: 4px; font-size: 14px; outline: none; transition: border 0.15s; }
+.form-input:focus { border-color: #e77600; box-shadow: 0 0 0 3px rgba(231,118,0,0.2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.auth-btn { width: 100%; padding: 10px; background: var(--orange); border: 1px solid var(--orange-dark); border-radius: 4px; font-size: 14px; font-weight: 600; color: #111; cursor: pointer; }
+.auth-btn:hover { background: var(--orange-dark); }
+.auth-terms { font-size: 12px; color: var(--muted); margin-top: 12px; text-align: center; }
+.auth-switch { font-size: 13px; text-align: center; margin-top: 16px; }
+.auth-switch a { color: #007bff; cursor: pointer; }
+.demo-hint { background: #fef9e7; border: 1px solid #fdebd0; border-radius: 4px; padding: 10px 14px; font-size: 13px; color: #7d6608; margin-bottom: 14px; }
+
+/* ===== ADMIN PAGE ===== */
+.admin-layout { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 20px 0; align-items: start; }
+.admin-sidebar { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 12px; }
+.admin-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--muted); transition: all 0.15s; }
+.admin-menu-item:hover, .admin-menu-item.active { background: #fff3e0; color: #c45500; }
+.admin-menu-icon { font-size: 16px; }
+.admin-content { background: #fff; border-radius: var(--card-radius); border: 1px solid var(--border); padding: 20px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.stat-box { background: #f7f7f7; border-radius: 8px; padding: 16px; text-align: center; }
+.stat-num { font-size: 28px; font-weight: 700; color: var(--navy); }
+.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { background: #f7f7f7; padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
+.data-table tr:hover td { background: #fffbf5; }
+.data-table img { width: 40px; height: 40px; object-fit: contain; background: #f7f7f7; border-radius: 4px; padding: 3px; }
+.sql-block { background: #1e1e1e; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.sql-title { font-size: 13px; font-weight: 600; color: #fbbf24; margin-bottom: 8px; }
+.sql-code { font-family: 'Courier New', monospace; font-size: 12px; color: #7dd3fc; white-space: pre-wrap; line-height: 1.7; }
+
+/* ===== TOAST ===== */
+.toast { position: fixed; bottom: 28px; right: 28px; background: var(--navy); color: #fff; padding: 14px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 10px; max-width: 360px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb { font-size: 13px; color: #007bff; margin: 12px 0; }
+.breadcrumb span { color: var(--muted); }
+
+/* ===== EMPTY ===== */
+.empty-box { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-box img { width: 120px; height: 120px; object-fit: contain; margin: 0 auto 16px; opacity: 0.4; }
+.empty-box h3 { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+
+/* ===== MODAL ===== */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; }
+.modal-bg.open { display: flex; }
+.modal-box { background: #fff; border-radius: 8px; padding: 24px; width: 440px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+.modal-box h3 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .detail-layout { grid-template-columns: 1fr; }
+  .cart-layout { grid-template-columns: 1fr; }
+  .admin-layout { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .hero { height: 220px; }
+  .hero-title { font-size: 26px; }
+}
+@media (max-width: 600px) {
+  .nav-deliver, .nav-link:not(.nav-link-account) { display: none; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .nav-top { padding: 8px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <div class="nav-top">
+    <div class="nav-logo" onclick="showPage('home')">
+      <div>
+        <div class="logo-text">Electro<span>Market</span></div>
+        <div class="logo-in">.in</div>
+      </div>
+    </div>
+    <div class="nav-deliver">
+      <small>Deliver to</small>
+      <b>Udupi 576101</b>
+    </div>
+    <div class="nav-search">
+      <select class="search-cat">
+        <option>All</option>
+        <option>Laptops</option>
+        <option>Mobiles</option>
+        <option>Headphones</option>
+        <option>Tablets</option>
+      </select>
+      <input class="search-input" type="text" id="searchInput" placeholder="Search electronics, accessories & more..." oninput="liveSearch()">
+      <button class="search-btn" onclick="runSearch()">
+        <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#333" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-link nav-link-account" onclick="showPage('account')">
+        <small id="navGreet">Hello, sign in</small>
+        <b>Account & Lists</b>
+      </div>
+      <div class="nav-link" onclick="showPage('orders')">
+        <small>Returns</small>
+        <b>& Orders</b>
+      </div>
+      <div class="nav-cart" onclick="showPage('cart')">
+        <div class="cart-icon" style="position:relative;">🛒<span class="cart-count" id="cartBadge">0</span></div>
+        <span class="cart-label">Cart</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-cat-btn active" onclick="filterCat('All',this)">☰ All</button>
+    <button class="nav-cat-btn" onclick="filterCat('Laptops',this)">Laptops</button>
+    <button class="nav-cat-btn" onclick="filterCat('Headphones',this)">Headphones</button>
+    <button class="nav-cat-btn" onclick="filterCat('Tablets',this)">Tablets</button>
+    <button class="nav-cat-btn" onclick="filterCat('Accessories',this)">Accessories</button>
+    <button class="nav-cat-btn" onclick="filterCat('Monitors',this)">Monitors</button>
+    <button class="nav-cat-btn" onclick="filterCat('Components',this)">Components</button>
+    <button class="nav-cat-btn" onclick="showPage('admin')">Admin Panel</button>
+  </div>
+</header>
+
+<div class="toast" id="toast">✓ <span id="toastMsg"></span></div>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="pg-home">
+  <div class="hero">
+    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=80" alt="Electronics" class="hero-img">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <div class="hero-tag">GREAT DEALS</div>
+        <h1 class="hero-title">Premium Electronics<br>at Best Prices</h1>
+        <p class="hero-sub">Laptops, Headphones, Tablets & More – Free delivery on eligible orders</p>
+        <button class="hero-btn" onclick="showPage('shop')">Shop Now →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Recommendations -->
+    <div class="section">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🔮 Recommended For You</div>
+          <span class="see-all" onclick="showPage('shop')">See all recommendations</span>
+        </div>
+        <div class="hscroll"><div class="hscroll-grid" id="recRow"></div></div>
+      </div>
+    </div>
+
+    <!-- Deals -->
+    <div class="section">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🔥 Today's Deals</div>
+          <span class="see-all" onclick="showPage('shop')">See all deals</span>
+        </div>
+        <div class="deals-row" id="dealsRow"></div>
+      </div>
+    </div>
+
+    <!-- Trending -->
+    <div class="section">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📈 Best Sellers</div>
+          <span class="see-all" onclick="showPage('shop')">See all</span>
+        </div>
+        <div class="hscroll"><div class="hscroll-grid" id="trendRow"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHOP PAGE ===== -->
+<div class="page" id="pg-shop">
+  <div class="container" style="padding-top:16px;">
+    <div class="section-card" style="margin-bottom:16px;">
+      <div class="section-header">
+        <div class="section-title" id="shopTitle">All Electronics</div>
+        <span style="font-size:13px;color:var(--muted);" id="shopCount"></span>
+      </div>
+      <div class="product-grid" id="shopGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRODUCT DETAIL PAGE ===== -->
+<div class="page" id="pg-detail">
+  <div class="container">
+    <div class="breadcrumb" id="detailBread"></div>
+    <div class="detail-layout" id="detailContent"></div>
+    <div class="section-card" style="margin-top:20px;">
+      <div class="section-header"><div class="section-title">Related Products</div></div>
+      <div class="hscroll"><div class="hscroll-grid" id="relatedRow"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CART PAGE ===== -->
+<div class="page" id="pg-cart">
+  <div class="container">
+    <div class="cart-layout">
+      <div class="cart-main">
+        <div class="cart-title">Shopping Cart <span style="font-size:14px;color:var(--muted);font-weight:400;" id="cartItemCount"></span></div>
+        <div id="cartList"></div>
+      </div>
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Subtotal</span><span id="summarySubtotal">₹0</span></div>
+        <div class="summary-row"><span>Shipping</span><span style="color:var(--green);">FREE</span></div>
+        <div class="summary-row"><span>GST (18%)</span><span id="summaryTax">₹0</span></div>
+        <div class="summary-total"><span>Order Total</span><span id="summaryTotal">₹0</span></div>
+        <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        <p style="font-size:12px;text-align:center;color:var(--muted);margin-top:10px;">🔒 Secure checkout</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ORDERS PAGE ===== -->
+<div class="page" id="pg-orders">
+  <div class="container">
+    <div class="orders-wrap">
+      <h2>Your Orders</h2>
+      <div id="ordersList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACCOUNT PAGE ===== -->
+<div class="page" id="pg-account">
+  <div class="container">
+    <div class="auth-wrap" id="authForms"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="page" id="pg-admin">
+  <div class="container">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div style="font-size:13px;font-weight:700;color:var(--muted);padding:8px 12px;text-transform:uppercase;letter-spacing:1px;">Admin Panel</div>
+        <div class="admin-menu-item active" onclick="adminSection('dashboard',this)"><span class="admin-menu-icon">📊</span>Dashboard</div>
+        <div class="admin-menu-item" onclick="adminSection('products',this)"><span class="admin-menu-icon">📦</span>Products</div>
+        <div class="admin-menu-item" onclick="adminSection('users',this)"><span class="admin-menu-icon">👥</span>Users</div>
+        <div class="admin-menu-item" onclick="adminSection('orders',this)"><span class="admin-menu-icon">🧾</span>Orders</div>
+        <div class="admin-menu-item" onclick="adminSection('sql',this)"><span class="admin-menu-icon">🔍</span>SQL Queries</div>
+      </div>
+      <div class="admin-content" id="adminContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — real product images from open sources
+// ============================================================
+const PRODUCTS = [
+  {id:1, name:'Sony WH-1000XM5 Wireless Noise Cancelling Headphones', cat:'Headphones', brand:'Sony',
+   price:24990, mrp:34990, rating:4.8, reviews:18430, stock:45, sold:2300,
+   img:'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400&q=80','https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80'],
+   desc:'Industry-leading noise cancellation with 30-hour battery life and multipoint connection.',
+   features:['Industry-leading NC with Auto NC Optimizer','30-hour battery life','Multipoint connection – 2 devices simultaneously','Speak-to-Chat and Quick Attention mode','Lightweight 250g design']},
+  {id:2, name:'Apple iPad Air 10.9" M1 Chip Wi-Fi 64GB', cat:'Tablets', brand:'Apple',
+   price:54900, mrp:59900, rating:4.9, reviews:9820, stock:12, sold:1800,
+   img:'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80','https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400&q=80'],
+   desc:'Supercharged by the M1 chip. 10.9-inch Liquid Retina display with True Tone.',
+   features:['M1 chip for next-level performance','10.9-inch Liquid Retina display','12MP Ultra Wide front camera','USB-C connector with up to 2x faster charging','Compatible with Apple Pencil (2nd gen) and Magic Keyboard']},
+  {id:3, name:'Keychron K2 Wireless Mechanical Keyboard', cat:'Accessories', brand:'Keychron',
+   price:5999, mrp:7999, rating:4.6, reviews:5430, stock:78, sold:3200,
+   img:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80','https://images.unsplash.com/photo-1602526213038-81c0a9e35a32?w=400&q=80'],
+   desc:'75% compact layout with hot-swappable switches and RGB backlight.',
+   features:['Bluetooth 5.1 / USB-C wired dual mode','Hot-swappable Gateron switches','RGB backlight with white backlight version','4000mAh battery – up to 240 hours','Compatible with Mac and Windows']},
+  {id:4, name:'Samsung 27" Odyssey G7 4K Gaming Monitor', cat:'Monitors', brand:'Samsung',
+   price:34999, mrp:45990, rating:4.7, reviews:3210, stock:34, sold:950,
+   img:'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80','https://images.unsplash.com/photo-1585792180666-f7347c490ee2?w=400&q=80'],
+   desc:'4K UHD 144Hz IPS panel with HDR600 and 1ms response time.',
+   features:['4K UHD (3840x2160) resolution','144Hz refresh rate, 1ms response','HDR600 certification','G-Sync & FreeSync Premium Pro','USB hub: 2x USB-A, 1x USB-C']},
+  {id:5, name:'Logitech MX Master 3S Wireless Mouse', cat:'Accessories', brand:'Logitech',
+   price:6495, mrp:8999, rating:4.8, reviews:12760, stock:67, sold:4100,
+   img:'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80','https://images.unsplash.com/photo-1605773527852-c546a8584ea3?w=400&q=80'],
+   desc:'MagSpeed electromagnetic scroll with 8K DPI Darkfield sensor, whisper-quiet clicks.',
+   features:['8000 DPI Darkfield sensor – works on glass','MagSpeed electromagnetic scrolling','Quiet click buttons – 90% less noise','70-day battery on full charge','Connect to 3 devices via Bluetooth or USB receiver']},
+  {id:6, name:'Dell XPS 15 9530 Laptop – Intel Core i7 16GB 512GB', cat:'Laptops', brand:'Dell',
+   price:134990, mrp:159990, rating:4.9, reviews:2890, stock:8, sold:620,
+   img:'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80','https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80'],
+   desc:'15.6" OLED display with 13th Gen Intel i7, NVIDIA RTX 4060 and premium build.',
+   features:['13th Gen Intel Core i7-13700H','NVIDIA GeForce RTX 4060 8GB','15.6" 3.5K OLED InfinityEdge display','16GB DDR5 RAM, 512GB SSD','86Wh battery, Thunderbolt 4']},
+  {id:7, name:'Anker 7-in-1 USB C Hub with 4K HDMI', cat:'Accessories', brand:'Anker',
+   price:1999, mrp:3499, rating:4.5, reviews:21000, stock:120, sold:5600,
+   img:'https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=400&q=80'],
+   desc:'4K HDMI, 3x USB-A 5Gbps, SD/microSD card reader, 100W Power Delivery.',
+   features:['4K@30Hz HDMI output','3 USB-A 3.0 ports (5Gbps)','SD and microSD card slots','100W USB-C Power Delivery passthrough','Compact aluminum body']},
+  {id:8, name:'Bose QuietComfort 45 Bluetooth Headphones', cat:'Headphones', brand:'Bose',
+   price:22900, mrp:32000, rating:4.7, reviews:8540, stock:30, sold:1450,
+   img:'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&q=80','https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=400&q=80'],
+   desc:'World-class noise cancellation with Aware Mode and 24-hour battery.',
+   features:['QuietComfort Noise Cancellation + Aware Mode','24-hour battery life','Proprietary TriPort acoustic architecture','Soft ear cushion protein leather','USB-C and Bluetooth 5.1']},
+  {id:9, name:'Secretlab TITAN Evo Gaming Chair', cat:'Furniture', brand:'Secretlab',
+   price:32990, mrp:42000, rating:4.4, reviews:4320, stock:22, sold:880,
+   img:'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1598550476439-6847785fecca?w=400&q=80'],
+   desc:'Premium gaming chair with 4-way L-ADAPT lumbar support and 165° recline.',
+   features:['4-way L-ADAPT lumbar support system','Integrated head pillow','4D armrests with CloudSwap system','Cold-cure foam seat base','165° recline with multi-tilt mechanism']},
+  {id:10, name:'Logitech C920x HD Pro Webcam 1080p', cat:'Accessories', brand:'Logitech',
+   price:6495, mrp:8999, rating:4.6, reviews:34200, stock:55, sold:2000,
+   img:'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80'],
+   desc:'Full HD 1080p/30fps webcam with dual stereo mics and automatic light correction.',
+   features:['Full HD 1080p/30fps recording','Dual stereo microphones with noise reduction','Automatic low light correction','H.264 video compression','Compatible with Zoom, Teams, Meet']},
+  {id:11, name:'ASUS ROG Strix NVIDIA RTX 4070 OC 12GB', cat:'Components', brand:'ASUS',
+   price:49990, mrp:59990, rating:4.9, reviews:1820, stock:5, sold:400,
+   img:'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1591488320449-011701bb6704?w=400&q=80'],
+   desc:'NVIDIA Ada Lovelace architecture with 12GB GDDR6X and DLSS 3 support.',
+   features:['NVIDIA GeForce RTX 4070 GPU','12GB GDDR6X memory, 192-bit bus','DLSS 3 and Ray Tracing support','ROG Strix triple fan cooling','Boost clock 2610MHz OC mode']},
+  {id:12, name:'Samsung 980 Pro NVMe SSD 1TB PCIe 4.0', cat:'Components', brand:'Samsung',
+   price:7499, mrp:12990, rating:4.8, reviews:28900, stock:90, sold:3800,
+   img:'https://images.unsplash.com/photo-1628753025340-a8e3b8ba89c5?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1628753025340-a8e3b8ba89c5?w=400&q=80'],
+   desc:'7000MB/s sequential read speed with PCIe 4.0 NVMe interface.',
+   features:['7,000MB/s read / 5,000MB/s write','PCIe 4.0 NVMe 1.3c M.2 2280','Samsung V-NAND 3-bit MLC','Thermal Control (Dynamic Thermal Guard)','5-year limited warranty']},
+  {id:13, name:'Philips Hue White Smart LED Bulb Starter Kit', cat:'Accessories', brand:'Philips',
+   price:4999, mrp:7999, rating:4.3, reviews:9200, stock:200, sold:6500,
+   img:'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=80'],
+   desc:'Smart LED starter kit with Hue Bridge and 2 A19 bulbs, voice control ready.',
+   features:['2 Hue White A19 bulbs + Bridge','Voice control: Alexa, Google, Siri','Set automations and schedules','50,000 hours of life','Works with 54 other Hue accessories']},
+  {id:14, name:'Razer DeathAdder V3 HyperSpeed Wireless', cat:'Accessories', brand:'Razer',
+   price:5499, mrp:8499, rating:4.7, reviews:6700, stock:44, sold:2900,
+   img:'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=400&q=80'],
+   desc:'Ultralight 63g ergonomic design with Focus X optical sensor and 90-hour battery.',
+   features:['Focus X 26K DPI optical sensor','Ultralight 63g design','90-hour battery life','HyperSpeed wireless technology','6 programmable buttons']},
+  {id:15, name:'Apple iPad Pro 12.9" M2 Chip Wi-Fi 128GB', cat:'Tablets', brand:'Apple',
+   price:89900, mrp:99900, rating:4.9, reviews:4320, stock:7, sold:550,
+   img:'https://images.unsplash.com/photo-1627125756979-9a49ab0ea5dd?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1627125756979-9a49ab0ea5dd?w=400&q=80'],
+   desc:'M2 chip, ProMotion 120Hz Liquid Retina XDR display with mini-LED.',
+   features:['M2 chip – 35% faster than M1','12.9" Liquid Retina XDR (mini-LED) display','ProMotion adaptive 120Hz','12MP Wide + 10MP Ultra Wide cameras','Thunderbolt / USB 4 connector']},
+  {id:16, name:'WD My Passport 2TB Portable External SSD', cat:'Components', brand:'WD',
+   price:8499, mrp:13990, rating:4.7, reviews:15600, stock:60, sold:1750,
+   img:'https://images.unsplash.com/photo-1597138804456-e7dca7f59d54?w=400&q=80',
+   imgs:['https://images.unsplash.com/photo-1597138804456-e7dca7f59d54?w=400&q=80'],
+   desc:'1050MB/s portable SSD with USB 3.2 Gen 2 and hardware encryption.',
+   features:['Up to 1050MB/s transfer speed','USB 3.2 Gen 2 (USB-C)','256-bit AES hardware encryption','Password protection','Compatible with PS4, PS5, Xbox']},
+];
+
+const ORDERS_DEMO = [
+  {id:'#405-8210-1892',date:'30 November 2024',status:'Delivered',total:26990,items:[
+    {id:1,qty:1,price:24990},{id:7,qty:2,price:1999}]},
+  {id:'#405-7133-2241',date:'15 October 2024',status:'Delivered',total:6495,items:[
+    {id:5,qty:1,price:6495}]},
+  {id:'#405-9902-3381',date:'3 December 2024',status:'Shipped',total:13494,items:[
+    {id:3,qty:1,price:5999},{id:12,qty:1,price:7499}]},
+  {id:'#405-1122-9981',date:'6 December 2024',status:'Processing',total:6495,items:[
+    {id:10,qty:1,price:6495}]},
+];
+
+const USERS_DEMO = [
+  {id:1,name:'Sristi Bose',email:'sristi@email.com',regno:'240953660',orders:4,joined:'15 Jan 2024'},
+  {id:2,name:'Raj Kumar',email:'raj@email.com',regno:'240953661',orders:7,joined:'10 Feb 2024'},
+  {id:3,name:'Priya Sharma',email:'priya@email.com',regno:'240953662',orders:3,joined:'5 Mar 2024'},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let cart = [];
+let currentUser = null;
+let currentCat = 'All';
+let currentProduct = null;
+
+// ============================================================
+// UTILS
+// ============================================================
+function fmt(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+function discount(p,m) { return Math.round((m-p)/m*100); }
+function stars(r) { let s=''; for(let i=1;i<=5;i++) s+= i<=Math.floor(r)?'★':(i-r<1?'½':'☆'); return s; }
+function toast(msg) {
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='home') renderHome();
+  if(name==='shop') renderShop();
+  if(name==='cart') renderCart();
+  if(name==='orders') renderOrders();
+  if(name==='account') renderAccount();
+  if(name==='admin') { adminSection('dashboard', document.querySelector('.admin-menu-item')); }
+}
+
+// ============================================================
+// PRODUCT CARD
+// ============================================================
+function prodCard(p) {
+  const disc = discount(p.price, p.mrp);
+  return `<div class="prod-card" onclick="openDetail(${p.id})">
+    <div class="prod-img-wrap">
+      <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80'">
+    </div>
+    <div class="prod-body">
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-rating">
+        <span class="stars">${stars(p.rating)}</span>
+        <span class="rating-count">${p.reviews.toLocaleString()}</span>
+      </div>
+      ${disc>0?`<span class="prod-badge">${disc}% off</span>`:''}
+      <div class="prod-price">${fmt(p.price)}</div>
+      <div class="prod-price-orig">M.R.P: ${fmt(p.mrp)}</div>
+      <div class="prod-delivery">FREE delivery <span>by tomorrow</span></div>
+      <button class="add-btn" onclick="event.stopPropagation();addToCart(${p.id})">Add to Cart</button>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  // Recommendations (accessories + headphones — simulate SQL category join)
+  const recs = PRODUCTS.filter(p=>['Accessories','Headphones'].includes(p.cat)).slice(0,6);
+  document.getElementById('recRow').innerHTML = recs.map(prodCard).join('');
+  // Deals (biggest discount)
+  const deals = [...PRODUCTS].sort((a,b)=>discount(b.price,b.mrp)-discount(a.price,a.mrp)).slice(0,6);
+  document.getElementById('dealsRow').innerHTML = deals.map(p=>`
+    <div class="deal-card" onclick="openDetail(${p.id})">
+      <img class="deal-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80'">
+      <div class="deal-info">
+        <div class="deal-badge">Up to ${discount(p.price,p.mrp)}% off</div>
+        <div class="deal-name">${p.name}</div>
+        <div class="deal-price">${fmt(p.price)} <span style="font-size:12px;color:var(--muted);text-decoration:line-through;">${fmt(p.mrp)}</span></div>
+      </div>
+    </div>`).join('');
+  // Trending (by sold)
+  const trending = [...PRODUCTS].sort((a,b)=>b.sold-a.sold).slice(0,8);
+  document.getElementById('trendRow').innerHTML = trending.map(prodCard).join('');
+}
+
+// ============================================================
+// SHOP
+// ============================================================
+function renderShop(cat='', q='') {
+  let prods = [...PRODUCTS];
+  const activeCat = cat || currentCat;
+  if(activeCat && activeCat!=='All') prods=prods.filter(p=>p.cat===activeCat);
+  if(q) prods=prods.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())||p.cat.toLowerCase().includes(q.toLowerCase())||p.brand.toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('shopTitle').textContent = activeCat==='All'?'All Electronics':activeCat;
+  document.getElementById('shopCount').textContent = `${prods.length} results`;
+  document.getElementById('shopGrid').innerHTML = prods.length
+    ? prods.map(prodCard).join('')
+    : `<div class="empty-box" style="grid-column:1/-1"><h3>No results found</h3><p>Try a different search or category</p></div>`;
+}
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.nav-cat-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  showPage('shop');
+}
+function liveSearch() {}
+function runSearch() {
+  const q = document.getElementById('searchInput').value;
+  currentCat='All';
+  showPage('shop');
+  renderShop('All', q);
+}
+
+// ============================================================
+// PRODUCT DETAIL
+// ============================================================
+function openDetail(id) {
+  currentProduct = PRODUCTS.find(p=>p.id===id);
+  const p = currentProduct;
+  const disc = discount(p.price, p.mrp);
+  document.getElementById('detailBread').innerHTML = `<a onclick="showPage('home')" style="cursor:pointer;">Home</a> › <a onclick="showPage('shop')" style="cursor:pointer;">${p.cat}</a> › <span style="color:var(--text);">${p.brand}</span>`;
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-imgs">
+      <img id="mainImg" class="detail-main-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80'">
+      <div class="detail-thumbs">
+        ${p.imgs.map((img,i)=>`<img class="thumb${i===0?' active':''}" src="${img}" onclick="switchImg('${img}',this)" onerror="this.style.display='none'">`).join('')}
+      </div>
+    </div>
+    <div class="detail-info">
+      <div class="detail-brand">${p.brand}</div>
+      <h1 class="detail-title">${p.name}</h1>
+      <div class="detail-rating">
+        <span class="stars" style="font-size:16px;">${stars(p.rating)}</span>
+        <span style="color:#007bff;">${p.rating}</span>
+        <span style="color:var(--muted);">|</span>
+        <span style="color:#007bff;">${p.reviews.toLocaleString()} ratings</span>
+      </div>
+      <div class="detail-price-box">
+        ${disc>0?`<span class="prod-badge">${disc}% off</span>`:''}
+        <div class="detail-price">${fmt(p.price)}</div>
+        <div class="detail-price-orig">M.R.P: ${fmt(p.mrp)}</div>
+        <div class="detail-save">You save: ${fmt(p.mrp-p.price)} (${disc}%)</div>
+      </div>
+      <p style="font-size:14px;color:#333;margin-bottom:12px;">${p.desc}</p>
+      <ul class="detail-feat">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+    </div>
+    <div class="buy-box">
+      <div class="buy-price">${fmt(p.price)}</div>
+      <div class="buy-delivery">FREE Delivery by Tomorrow</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">Order within 3 hrs 24 mins</div>
+      <div class="buy-stock">${p.stock>10?'In Stock':p.stock>0?`Only ${p.stock} left – order soon`:'Out of Stock'}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <label style="font-size:13px;font-weight:500;">Qty:</label>
+        <select class="qty-select" id="detailQty" style="width:auto;padding:6px 10px;">
+          ${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join('')}
+        </select>
+      </div>
+      <button class="buy-btn" onclick="buyNow(${p.id})">Buy Now</button>
+      <button class="cart-btn" onclick="addToCart(${p.id})">Add to Cart</button>
+      <p class="buy-note">🔒 Secure transaction | Sold by ElectroMarket</p>
+    </div>`;
+  // Related
+  const related = PRODUCTS.filter(x=>x.cat===p.cat&&x.id!==p.id).slice(0,6);
+  document.getElementById('relatedRow').innerHTML = related.map(prodCard).join('');
+  showPage('detail');
+}
+function switchImg(src, el) {
+  document.getElementById('mainImg').src=src;
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+function buyNow(id) { addToCart(id); showPage('cart'); }
+
+// ============================================================
+// CART
+// ============================================================
+function addToCart(id) {
+  const p = PRODUCTS.find(x=>x.id===id);
+  const existing = cart.find(x=>x.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...p, qty:1});
+  updateCartBadge();
+  toast(`"${p.name.slice(0,30)}..." added to cart`);
+}
+function updateCartBadge() {
+  document.getElementById('cartBadge').textContent = cart.reduce((a,x)=>a+x.qty,0);
+}
+function renderCart() {
+  const el = document.getElementById('cartList');
+  document.getElementById('cartItemCount').textContent = cart.length ? `(${cart.reduce((a,x)=>a+x.qty,0)} items)` : '';
+  if(!cart.length) {
+    el.innerHTML=`<div class="empty-box"><h3>Your cart is empty</h3><p>Add items to get started</p><button onclick="showPage('shop')" style="margin-top:16px;padding:10px 24px;background:var(--orange);border:none;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;">Continue Shopping</button></div>`;
+    document.getElementById('summarySubtotal').textContent='₹0';
+    document.getElementById('summaryTax').textContent='₹0';
+    document.getElementById('summaryTotal').textContent='₹0';
+    return;
+  }
+  el.innerHTML = cart.map(item=>`
+    <div class="cart-item-row">
+      <img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80'">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-stock">In Stock</div>
+        <div class="cart-item-price">${fmt(item.price * item.qty)}</div>
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+          <button class="del-btn" onclick="removeItem(${item.id})">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+  const sub = cart.reduce((a,x)=>a+x.price*x.qty,0);
+  const tax = Math.round(sub*0.18);
+  document.getElementById('summarySubtotal').textContent=fmt(sub);
+  document.getElementById('summaryTax').textContent=fmt(tax);
+  document.getElementById('summaryTotal').textContent=fmt(sub+tax);
+}
+function changeQty(id, d) {
+  const item = cart.find(x=>x.id===id);
+  if(!item) return;
+  item.qty+=d;
+  if(item.qty<=0) cart=cart.filter(x=>x.id!==id);
+  updateCartBadge(); renderCart();
+}
+function removeItem(id) { cart=cart.filter(x=>x.id!==id); updateCartBadge(); renderCart(); }
+function checkout() {
+  if(!cart.length){toast('Cart is empty!');return;}
+  if(!currentUser){toast('Please sign in to checkout');showPage('account');return;}
+  const sub=cart.reduce((a,x)=>a+x.price*x.qty,0);
+  const newOrder={id:'#405-'+Math.floor(1000+Math.random()*9000)+'-'+Math.floor(1000+Math.random()*9000),date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}),status:'Processing',total:Math.round(sub*1.18),items:cart.map(x=>({id:x.id,qty:x.qty,price:x.price}))};
+  ORDERS_DEMO.unshift(newOrder);
+  cart=[]; updateCartBadge();
+  toast('🎉 Order placed successfully!');
+  showPage('orders');
+}
+
+// ============================================================
+// ORDERS
+// ============================================================
+function renderOrders() {
+  const el = document.getElementById('ordersList');
+  el.innerHTML = ORDERS_DEMO.map(o=>{
+    const items = o.items.map(i=>PRODUCTS.find(p=>p.id===i.id)).filter(Boolean);
+    return `<div class="order-card">
+      <div class="order-hdr">
+        <div><div class="order-hdr-lbl">Order Placed</div><div class="order-hdr-val">${o.date}</div></div>
+        <div><div class="order-hdr-lbl">Total</div><div class="order-hdr-val">${fmt(o.total)}</div></div>
+        <div><div class="order-hdr-lbl">Ship to</div><div class="order-hdr-val">${currentUser?currentUser.name:'Guest'}</div></div>
+        <div><div class="order-hdr-lbl">Order ID</div><div class="order-hdr-val">${o.id}</div></div>
+        <div class="order-status status-${o.status.replace(' ','')}">● ${o.status}</div>
+      </div>
+      <div class="order-items-list">
+        ${items.map(p=>`<div class="order-item-row">
+          <img class="order-item-img" src="${p.img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&q=80'">
+          <div><div class="order-item-name">${p.name}</div><div style="font-size:13px;color:var(--muted);">${fmt(o.items.find(i=>i.id===p.id).price)} × ${o.items.find(i=>i.id===p.id).qty}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// ACCOUNT
+// ============================================================
+function renderAccount() {
+  const el = document.getElementById('authForms');
+  if(currentUser) {
+    el.innerHTML=`<div class="auth-card">
+      <h2 class="auth-title">Your Account</h2>
+      <div style="display:flex;align-items:center;gap:16px;background:#fff3cd;border-radius:8px;padding:16px;margin-bottom:20px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#111;">${currentUser.name[0]}</div>
+        <div><div style="font-size:18px;font-weight:600;">${currentUser.name}</div><div style="font-size:13px;color:var(--muted);">${currentUser.email}</div><div style="font-size:12px;color:var(--muted);">Reg. No: ${currentUser.regno}</div></div>
+      </div>
+      <button onclick="showPage('orders')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fff;font-size:14px;cursor:pointer;margin-bottom:8px;">View My Orders</button>
+      <button onclick="logOut()" style="width:100%;padding:10px;background:#c40000;border:none;border-radius:4px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">Sign Out</button>
+    </div>`;
+  } else {
+    el.innerHTML=`<div class="auth-card">
+      <h2 class="auth-title">Sign in</h2>
+      <div class="demo-hint">🔑 Demo login: sristi@email.com / demo1234</div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="loginEmail" type="email" placeholder="email@example.com" value="sristi@email.com"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="loginPwd" type="password" placeholder="••••••••" value="demo1234"></div>
+      <button class="auth-btn" onclick="login()">Sign In</button>
+      <div class="auth-divider"><span>New to ElectroMarket?</span></div>
+      <button onclick="renderRegister()" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fff;font-size:14px;cursor:pointer;">Create your account</button>
+    </div>`;
+  }
+}
+function renderRegister() {
+  document.getElementById('authForms').innerHTML=`<div class="auth-card">
+    <h2 class="auth-title">Create account</h2>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">First name</label><input class="form-input" id="rFn" placeholder="First name"></div>
+      <div class="form-group"><label class="form-label">Last name</label><input class="form-input" id="rLn" placeholder="Last name"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="rEm" type="email" placeholder="email@example.com"></div>
+    <div class="form-group"><label class="form-label">Registration Number</label><input class="form-input" id="rRn" placeholder="240953660"></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="rPw" type="password" placeholder="At least 8 characters"></div>
+    <div class="form-group"><label class="form-label">Re-enter password</label><input class="form-input" id="rPw2" type="password" placeholder="Re-enter password"></div>
+    <button class="auth-btn" onclick="register()">Create your account</button>
+    <p class="auth-terms">By creating an account, you agree to ElectroMarket's Conditions of Use and Privacy Notice.</p>
+    <div class="auth-switch">Already have an account? <a onclick="renderAccount()">Sign in</a></div>
+  </div>`;
+}
+function login() {
+  const email=document.getElementById('loginEmail').value;
+  const u=USERS_DEMO.find(x=>x.email===email);
+  if(u){ currentUser=u; document.getElementById('navGreet').textContent='Hello, '+u.name.split(' ')[0]; toast('Welcome back, '+u.name.split(' ')[0]+'!'); renderAccount(); }
+  else toast('Account not found. Check email or register.');
+}
+function register() {
+  const fn=document.getElementById('rFn').value,ln=document.getElementById('rLn').value,em=document.getElementById('rEm').value,rn=document.getElementById('rRn').value,pw=document.getElementById('rPw').value,pw2=document.getElementById('rPw2').value;
+  if(!fn||!em||!rn||!pw){toast('Please fill all fields');return;}
+  if(pw!==pw2){toast('Passwords do not match');return;}
+  if(pw.length<8){toast('Password must be at least 8 characters');return;}
+  const nu={id:USERS_DEMO.length+1,name:fn+' '+ln,email:em,regno:rn,orders:0,joined:'Today'};
+  USERS_DEMO.push(nu); currentUser=nu;
+  document.getElementById('navGreet').textContent='Hello, '+fn;
+  toast('Account created! Welcome, '+fn+'!'); renderAccount();
+}
+function logOut() { currentUser=null; document.getElementById('navGreet').textContent='Hello, sign in'; toast('Signed out'); renderAccount(); }
+
+// ============================================================
+// ADMIN
+// ============================================================
+function adminSection(tab, el) {
+  document.querySelectorAll('.admin-menu-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const panel = document.getElementById('adminContent');
+  if(tab==='dashboard'){
+    const rev=ORDERS_DEMO.reduce((a,o)=>a+o.total,0);
+    panel.innerHTML=`<h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">Dashboard Overview</h3>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num" style="color:#007600;">${fmt(rev)}</div><div class="stat-lbl">Total Revenue</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:#c45500;">${PRODUCTS.length}</div><div class="stat-lbl">Products</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:#007bff;">${USERS_DEMO.length}</div><div class="stat-lbl">Customers</div></div>
+        <div class="stat-box"><div class="stat-num">${ORDERS_DEMO.length}</div><div class="stat-lbl">Orders</div></div>
+      </div>
+      <h4 style="font-size:15px;font-weight:600;margin-bottom:12px;">Top Selling Products</h4>
+      <table class="data-table">
+        <thead><tr><th></th><th>Product</th><th>Category</th><th>Price</th><th>Units Sold</th><th>Stock</th></tr></thead>
+        <tbody>${[...PRODUCTS].sort((a,b)=>b.sold-a.sold).slice(0,5).map(p=>`<tr>
+          <td><img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'"></td>
+          <td style="font-weight:500;">${p.name.slice(0,40)}...</td>
+          <td>${p.cat}</td><td>${fmt(p.price)}</td>
+          <td><b>${p.sold.toLocaleString()}</b></td>
+          <td style="color:${p.stock<10?'#c40000':'var(--green)'};">${p.stock}</td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+  } else if(tab==='products'){
+    panel.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h3 style="font-size:18px;font-weight:600;">All Products</h3><button onclick="toast('Add product form – connect to backend POST /api/products')" style="padding:8px 16px;background:var(--orange);border:1px solid var(--orange-dark);border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">+ Add Product</button></div>
+      <table class="data-table">
+        <thead><tr><th></th><th>Name</th><th>Brand</th><th>Category</th><th>Price</th><th>MRP</th><th>Stock</th></tr></thead>
+        <tbody>${PRODUCTS.map(p=>`<tr>
+          <td><img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'"></td>
+          <td style="max-width:220px;font-weight:500;">${p.name.slice(0,35)}...</td>
+          <td>${p.brand}</td><td>${p.cat}</td>
+          <td style="font-weight:600;">${fmt(p.price)}</td>
+          <td style="color:var(--muted);">${fmt(p.mrp)}</td>
+          <td style="color:${p.stock<10?'#c40000':'var(--green)'};">${p.stock}</td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+  } else if(tab==='users'){
+    panel.innerHTML=`<h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">Registered Users</h3>
+      <table class="data-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Reg. No</th><th>Joined</th><th>Orders</th></tr></thead>
+        <tbody>${USERS_DEMO.map(u=>`<tr>
+          <td style="font-weight:500;">${u.name}</td>
+          <td style="color:#007bff;">${u.email}</td>
+          <td>${u.regno}</td><td>${u.joined}</td>
+          <td><b>${u.orders}</b></td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+  } else if(tab==='orders'){
+    panel.innerHTML=`<h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">All Orders</h3>
+      <table class="data-table">
+        <thead><tr><th>Order ID</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>${ORDERS_DEMO.map(o=>`<tr>
+          <td style="font-weight:600;font-size:12px;">${o.id}</td>
+          <td>${o.date}</td>
+          <td style="color:var(--muted);font-size:12px;">${o.items.map(i=>{const p=PRODUCTS.find(x=>x.id===i.id);return p?p.name.slice(0,20)+'…':'?';}).join(', ')}</td>
+          <td style="font-weight:700;color:var(--green);">${fmt(o.total)}</td>
+          <td><span class="order-status status-${o.status.replace(' ','')}">● ${o.status}</span></td>
+        </tr>`).join('')}</tbody>
+      </table>`;
+  } else if(tab==='sql'){
+    const queries=[
+      {title:'SQL Recommendation Query',code:`SELECT p.product_id, p.name, p.price, c.name AS category,\n  p.rating, COUNT(oi2.product_id) AS popularity\nFROM products p\nJOIN categories c ON p.cat_id = c.cat_id\nJOIN order_items oi2 ON p.product_id = oi2.product_id\nWHERE p.cat_id IN (\n  SELECT DISTINCT pr.cat_id\n  FROM orders o JOIN order_items oi ON o.order_id=oi.order_id\n  JOIN products pr ON oi.product_id=pr.product_id\n  WHERE o.user_id = ? AND o.status != 'Cancelled'\n)\nAND p.product_id NOT IN (\n  SELECT oi3.product_id FROM orders o3\n  JOIN order_items oi3 ON o3.order_id=oi3.order_id\n  WHERE o3.user_id = ?\n)\nAND p.stock > 0\nGROUP BY p.product_id ORDER BY popularity DESC, p.rating DESC\nLIMIT 8;`},
+      {title:'Revenue by Category (Complex JOIN)',code:`SELECT c.name, COUNT(DISTINCT o.order_id) AS orders,\n  SUM(oi.qty * oi.price) AS gross_revenue,\n  ROUND(AVG(p.rating), 2) AS avg_rating\nFROM categories c\nJOIN products p ON c.cat_id = p.cat_id\nJOIN order_items oi ON p.product_id = oi.product_id\nJOIN orders o ON oi.order_id = o.order_id\nWHERE o.status != 'Cancelled'\nGROUP BY c.name ORDER BY gross_revenue DESC;`},
+      {title:'Trigger: Reduce Stock After Order',code:`CREATE TRIGGER trg_reduce_stock\nAFTER INSERT ON order_items\nFOR EACH ROW\nBEGIN\n  UPDATE products\n  SET stock = stock - NEW.qty,\n      units_sold = units_sold + NEW.qty\n  WHERE product_id = NEW.product_id;\nEND;`},
+      {title:'Procedure: PlaceOrder',code:`CREATE PROCEDURE PlaceOrder(IN p_user_id INT, IN p_shipping VARCHAR(200))\nBEGIN\n  DECLARE v_order_id INT;\n  INSERT INTO orders(user_id, status, shipping)\n  VALUES(p_user_id, 'Processing', p_shipping);\n  SET v_order_id = LAST_INSERT_ID();\n  INSERT INTO order_items(order_id, product_id, qty, price)\n  SELECT v_order_id, c.product_id, c.qty, p.price\n  FROM cart c JOIN products p ON c.product_id=p.product_id\n  WHERE c.user_id = p_user_id;\n  DELETE FROM cart WHERE user_id = p_user_id;\nEND;`}
+    ];
+    panel.innerHTML=`<h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">SQL Queries & DB Logic</h3>
+      ${queries.map(q=>`<div class="sql-block"><div class="sql-title">${q.title}</div><pre class="sql-code">${q.code}</pre></div>`).join('')}`;
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHome();
+</script>
+</body>
+</html>
