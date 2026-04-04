@@ -1,8 +1,5 @@
 """
 Electronic Marketplace System - Backend API
-CSS 2212 DBS Lab Mini Project
-Team: Sristi Bose (240953660, Roll No. 56)
-
 Requirements: pip install flask flask-cors mysql-connector-python bcrypt
 Run: python app.py
 """
